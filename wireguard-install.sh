@@ -295,7 +295,7 @@ EOF
 	# Enable and start the wg-quick service
 	systemctl enable --now wg-quick@wg0.service
 	echo
-	qrencode -t UTF8 < "wg-client/$client.conf"
+	qrencode -t UTF8 < "$PWD/wg-client/$client.conf"
 	echo -e '\xE2\x86\x91 That is a QR code containing the client configuration.'
 	echo
 	# If the kernel module didn't load, system probably had an outdated kernel
@@ -314,7 +314,7 @@ EOF
 		echo "Finished!"
 	fi
 	echo
-	echo "The client configuration is available in:" ~/"$client.conf"
+	echo "The client configuration is available in:" "$PWD/wg-client/$client.conf"
 	echo "New clients can be added by running this script again."
 else
 	clear
@@ -347,10 +347,10 @@ else
 			# Append new client configuration to the WireGuard interface
 			wg addconf wg0 <(sed -n "/^# BEGIN_PEER $client/,/^# END_PEER $client/p" /etc/wireguard/wg0.conf)
 			echo
-			qrencode -t UTF8 < ~/"$client.conf"
+			qrencode -t UTF8 < "$PWD/wg-client/$client.conf"
 			echo -e '\xE2\x86\x91 That is a QR code containing your client configuration.'
 			echo
-			echo "$client added. Configuration available in:" ~/"$client.conf"
+			echo "$client added. Configuration available in:" "$PWD/wg-client/$client.conf"
 			exit
 		;;
 		2)
