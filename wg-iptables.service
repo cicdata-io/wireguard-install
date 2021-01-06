@@ -1,0 +1,31 @@
+[Unit]
+Before=network.target
+
+[Service]
+Type=oneshot
+
+# Start action
+ExecStart=/sbin/iptables -I INPUT -p udp --dport 51820 -j ACCEPT
+ExecStart=/sbin/iptables -t nat -A POSTROUTING -s 10.7.0.0/24 -j SNAT --to 10.100.101.5
+ExecStart=/sbin/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+# allow access anything first
+ExecStart=/sbin/iptables -A FORWARD -s 10.7.0.0/16 -j ACCEPT
+# deny other team from production
+ExecStart=/sbin/iptables -A FORWARD -s 10.7.1.0/24 -d 10.0.0.0/16 -j DROP
+ExecStart=/sbin/iptables -A FORWARD -s 10.7.2.0/24 -d 10.0.0.0/16 -j DROP
+
+# Stop action
+ExecStop=/sbin/iptables -D INPUT -p udp --dport 51820 -j ACCEPT
+ExecStop=/sbin/iptables -t nat -D POSTROUTING -s 10.7.0.0/16 -j SNAT --to 10.100.101.5
+#ExecStart=/sbin/iptables -D FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
+# allow access anything first
+ExecStop=/sbin/iptables -D FORWARD -s 10.7.0.0/16 -j ACCEPT
+# deny other team from production
+ExecStop=/sbin/iptables -D FORWARD -s 10.7.1.0/24 -d 10.0.0.0/16 -j DROP
+ExecStop=/sbin/iptables -D FORWARD -s 10.7.2.0/24 -d 10.0.0.0/16 -j DROP
+# End action
+
+RemainAfterExit=yes
+
+[Install]
+WantedBy=multi-user.target
