@@ -153,7 +153,7 @@ PrivateKey = $key
 [Peer]
 PublicKey = $(grep PrivateKey /etc/wireguard/wg0.conf | cut -d " " -f 3 | wg pubkey)
 PresharedKey = $psk
-AllowedIPs = 0.0.0.0/0, ::/0
+AllowedIPs = 10.0.0.0/8
 Endpoint = $(grep '^# ENDPOINT' /etc/wireguard/wg0.conf | cut -d " " -f 3):$(grep ListenPort /etc/wireguard/wg0.conf | cut -d " " -f 3)
 PersistentKeepalive = 25
 EOF

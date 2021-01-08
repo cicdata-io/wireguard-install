@@ -6,7 +6,7 @@ Type=oneshot
 
 # Start action
 ExecStart=/sbin/iptables -I INPUT -p udp --dport 51820 -j ACCEPT
-ExecStart=/sbin/iptables -t nat -A POSTROUTING -s 10.7.0.0/24 -j SNAT --to 10.100.101.5
+ExecStart=/sbin/iptables -t nat -A POSTROUTING -s 10.7.0.1/32 -j SNAT --to 10.100.101.5
 ExecStart=/sbin/iptables -I FORWARD -m state --state RELATED,ESTABLISHED -j ACCEPT
 # allow access anything first
 ExecStart=/sbin/iptables -A FORWARD -s 10.7.0.0/16 -j ACCEPT
