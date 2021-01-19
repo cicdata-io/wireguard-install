@@ -8,7 +8,7 @@
 devops_subnet="10.7.0"
 backend_subnet="10.7.1"
 data_subnet="10.7.2"
-dns="10.100.101.5"
+dns="10.7.0.1"
 
 firewall="iptables"
 
